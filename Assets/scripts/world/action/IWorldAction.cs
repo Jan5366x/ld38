@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.scripts.world
 {
-    interface IWorldDataAction {
-        void worldUpdate(WorldController controller, WorldSector sector);
+    public interface IWorldAction {
+        void worldUpdate(WorldController controller, WorldSector sector, int locX, int locY);
     }
 }

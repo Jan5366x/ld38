@@ -18,6 +18,10 @@ public class WorldObject : MonoBehaviour {
 		
 	}
 
+
+    public List<IWorldAction> getWorldActions() {
+        return new List<IWorldAction>(GetComponents<IWorldAction>());
+    }
   
 
 }

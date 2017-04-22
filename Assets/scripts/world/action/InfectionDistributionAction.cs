@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class InfectionDistributionAction : MonoBehaviour, IWorldDataAction {
+public class InfectionDistributionAction : MonoBehaviour, IWorldAction {
 
     // Use this for initialization
     void Start () {
@@ -16,8 +16,9 @@ public class InfectionDistributionAction : MonoBehaviour, IWorldDataAction {
 		
 	}
 
-    public void worldUpdate(WorldController controller, WorldSector sector)
+    public void worldUpdate(WorldController controller, WorldSector sector, int locX, int locY)
     {
+        // TODO
         throw new NotImplementedException();
     }
 

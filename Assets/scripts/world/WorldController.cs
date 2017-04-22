@@ -7,8 +7,14 @@ using UnityEngine;
 /// World Controller
 /// </summary>
 public class WorldController : MonoBehaviour {
+    private static float UPDATE_DELAY = 500.0f;
+
     public Transform[] worldElements;
     private WorldSector[,] sectors = new WorldSector[29,29];
+
+
+
+    private float updateTimer = 0.0f;
 
     // Use this for initialization
     void Start () {
@@ -21,8 +27,53 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+      
+        if (updateTimer <= 0 )
+        {
+
+            // run logic
+            worldUpdate();
+
+            // reset timer
+            updateTimer = UPDATE_DELAY;
+        }
+        else
+        {
+            // update timer
+            updateTimer -= Time.deltaTime;
+        }
+
 	}
+
+    private void worldUpdate() {
+
+        Debug.Log("World Update!");
+
+        for (int x = 0; x < sectors.GetUpperBound(0); x++)
+        {
+            for (int y = 0; y < sectors.GetUpperBound(1); y++)
+            {
+
+                WorldSector sector = sectors[x, y];
+
+                if (sector == null)
+                    continue;
+
+                WorldObject worldObject = sector.WorldObject;
+
+                if (worldObject == null)
+                    continue;
+
+                // execute actions
+                foreach (IWorldAction action in worldObject.getWorldActions()) {
+                    action.worldUpdate(this, sector,x,y);
+                }
+
+            }
+        }
+    }
+
+
 
 
     private void readWorldData() {
