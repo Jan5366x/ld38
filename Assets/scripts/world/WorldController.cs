@@ -53,6 +53,14 @@ public class WorldController : MonoBehaviour {
 
                 // TODO set world object
                 //   sectors[x, y].WorldOBject = ???
+				// TODO: NOT TESTED
+				foreach (Transform child in currentGameObject.transform) {
+					WorldObject worldObject = child.GetComponent("WorldObject") as WorldObject;
+					if (worldObject != null) {
+						sectors [x, y].WorldObject = worldObject;
+						break;
+					}
+				}
             }
         }
     }
