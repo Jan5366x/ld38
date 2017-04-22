@@ -31,12 +31,38 @@ public class WorldController : MonoBehaviour {
 		
 	}
 
+
     private void readWorldData() {
 
+        for (int x = 0; x < sectors.GetUpperBound(0); x++)
+        {
+            for (int y = 0; y < sectors.GetUpperBound(1); y++)
+            {
+                GameObject currentGameObject = GameObject.Find(getGroundName(x,y));
+
+                if (currentGameObject == null)
+                    continue;
+
+                WorldData data = currentGameObject.GetComponent<WorldData>();
+
+                if (data == null)
+                    continue;
+
+                // set world data
+                sectors[x, y].WorldData = data;
+
+                // TODO set world object
+                //   sectors[x, y].WorldOBject = ???
+            }
+        }
     }
 
+    private string getGroundName(int x, int y) {
+        return "G-" + x + "-" + y;
+    }
 
     /// <summary>
+    /// TODO delete this
     ///  test method
     /// </summary>
     private void testFill() {

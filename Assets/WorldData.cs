@@ -58,4 +58,6 @@ public class WorldData : MonoBehaviour {
             isInfected = value;
         }
     }
+
+
 }
