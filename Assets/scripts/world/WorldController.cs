@@ -21,8 +21,6 @@ public class WorldController : MonoBehaviour {
         // read world data
         readWorldData();
 
-        // make sure that the player can't leave the world! >_<
-        createWorldCollider();
 
         // TODO replace
         testFill();
