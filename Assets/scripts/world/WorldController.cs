@@ -15,9 +15,7 @@ public class WorldController : MonoBehaviour {
 
         // read world data
         readWorldData();
-
-
-       
+      
         // TEST: testInfect();
     }
 	
@@ -58,11 +56,10 @@ public class WorldController : MonoBehaviour {
                 // set world data
                 sector.WorldData = data;
 
-                // TODO set world object
-                //   sectors[x, y].WorldOBject = ???
+                // set world object
 				// TODO: NOT TESTED
 				foreach (Transform child in currentGameObject.transform) {
-					WorldObject worldObject = child.GetComponent("WorldObject") as WorldObject;
+					WorldObject worldObject = child.GetComponent<WorldObject>();
 					if (worldObject != null) {
 						sectors [x, y].WorldObject = worldObject;
 						break;
