@@ -30,6 +30,9 @@ public class WorldData : MonoBehaviour {
             if (infectedSprite != null)
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = infectedSprite;
+
+                // update flag on success
+                IsInfected = infected;
             }
 
         }
@@ -38,12 +41,14 @@ public class WorldData : MonoBehaviour {
             if (normalSprite != null)
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = normalSprite;
+
+                // update flag on success
+                IsInfected = infected;
             }
         }
 
 
-        // update flag
-        IsInfected = infected;
+     
     }
 
     public bool IsInfected
