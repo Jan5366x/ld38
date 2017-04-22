@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		transform.SetPositionAndRotation (new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z), new Quaternion ());
 		offset = transform.position - player.transform.position;	
 	}
 	
