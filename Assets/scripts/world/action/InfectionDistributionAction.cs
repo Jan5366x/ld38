@@ -1,12 +1,8 @@
-﻿using Assets.scripts.world;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class WorldObject : MonoBehaviour {
-
-
+public class InfectionDistributionAction : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +13,4 @@ public class WorldObject : MonoBehaviour {
 	void Update () {
 		
 	}
-
-  
-
 }

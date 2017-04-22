@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.scripts.world
 {
-    class WorldSector
+    public class WorldSector
     {
         private WorldData _worldData;
         private WorldObject _worldObject;
