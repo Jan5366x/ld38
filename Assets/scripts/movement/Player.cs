@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		var x = Input.GetAxis("Horizontal") * Time.deltaTime * speedFactor;
 		var y = Input.GetAxis("Vertical") * Time.deltaTime * speedFactor;
 
