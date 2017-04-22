@@ -12,8 +12,14 @@ public class WorldController : MonoBehaviour {
 
     private WorldSector[,] sectors = new WorldSector[20,20];
 
+
+
+
     // Use this for initialization
     void Start () {
+
+        // read world data
+        readWorldData();
 
         // make sure that the player can't leave the world! >_<
         createWorldCollider();
@@ -27,9 +33,7 @@ public class WorldController : MonoBehaviour {
 		
 	}
 
-
-
-    private void createWorldCollider() {
+    private void readWorldData() {
 
     }
 
