@@ -8,12 +8,7 @@ using UnityEngine;
 /// </summary>
 public class WorldController : MonoBehaviour {
     public Transform[] worldElements;
-    public int sectorSize = 64;
-
-    private WorldSector[,] sectors = new WorldSector[20,20];
-
-
-
+    private WorldSector[,] sectors = new WorldSector[29,29];
 
     // Use this for initialization
     void Start () {
@@ -22,8 +17,8 @@ public class WorldController : MonoBehaviour {
         readWorldData();
 
 
-        // TODO replace
-        testFill();
+       
+        // TEST: testInfect();
     }
 	
 	// Update is called once per frame
@@ -48,8 +43,20 @@ public class WorldController : MonoBehaviour {
                 if (data == null)
                     continue;
 
+                Debug.Log("world data " + x + "-" + y + "detected");
+
+
+                // handle lazy load
+                WorldSector sector = sectors[x, y];
+                if (sector == null)
+                {
+                    sector = new WorldSector();
+                    sectors[x, y] = sector;
+                }
+
+
                 // set world data
-                sectors[x, y].WorldData = data;
+                sector.WorldData = data;
 
                 // TODO set world object
                 //   sectors[x, y].WorldOBject = ???
@@ -73,11 +80,22 @@ public class WorldController : MonoBehaviour {
     /// TODO delete this
     ///  test method
     /// </summary>
-    private void testFill() {
+    private void testInfect() {
         for (int x = 0; x < sectors.GetUpperBound(0); x++) {
             for (int y = 0; y < sectors.GetUpperBound(1); y++)
             {
-                Instantiate(worldElements[Random.Range(0, worldElements.GetUpperBound(0))], new Vector3(x + 0.5f, -y + 0.5f, 0), new Quaternion());
+                WorldSector sector = sectors[x, y];
+
+                if (sector == null)
+                    continue;
+
+                WorldData data = sector.WorldData;
+
+                if (data == null)
+                    continue;
+
+                // infect
+                data.switchState(true);
             }
         }
     }
