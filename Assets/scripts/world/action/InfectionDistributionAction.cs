@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using Assets.scripts.world;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class InfectionDistributionAction : MonoBehaviour {
+public class InfectionDistributionAction : MonoBehaviour, IWorldDataAction {
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -13,4 +15,10 @@ public class InfectionDistributionAction : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void worldUpdate(WorldController controller, WorldSector sector)
+    {
+        throw new NotImplementedException();
+    }
+
 }
