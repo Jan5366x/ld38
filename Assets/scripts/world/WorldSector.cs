@@ -7,5 +7,6 @@ namespace Assets.scripts.world
 {
     class WorldSector
     {
+        
     }
 }
