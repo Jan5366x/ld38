@@ -1,23 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
+    private GameObject _player;
 
-	public GameObject player;
+    private Vector3 _offset;
 
-	private Vector3 offset;
+    // Use this for initialization
+    void Start()
+    {
+        _player = GameObject.Find("Player");
+        transform.SetPositionAndRotation(
+            new Vector3(_player.transform.position.x, _player.transform.position.y, transform.position.z),
+            new Quaternion()
+        );
+        _offset = transform.position - _player.transform.position;
+    }
 
-	// Use this for initialization
-	void Start () 
-	{
-		transform.SetPositionAndRotation (new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z), new Quaternion ());
-		offset = transform.position - player.transform.position;	
-	}
-	
-	// Update is called once per frame
-	void LateUpdate () 
-	{
-		transform.position = player.transform.position + offset;
-	}
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        transform.position = _player.transform.position + _offset;
+    }
 }
