@@ -4,8 +4,9 @@ namespace movement
 {
     public class PlayerMovement : MonoBehaviour
     {
-        public float SpeedFactorWalk = 1f;
-        public float SpeedFactorRun = 2f;
+        public float BaseSpeed = 2f;
+        public float SpeedFactorWalk = 0.5f;
+        public float SpeedFactorRun = 1f;
         public bool SprintOverride;
 
         private Animator _animator;
@@ -20,18 +21,19 @@ namespace movement
         void FixedUpdate()
         {
             var movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized
-                                 * Time.deltaTime;
+                                 * Time.deltaTime * BaseSpeed;
 
+            float speedFactor;
             if (Input.GetButton("Sprint") || SprintOverride)
-                movementVector *= SpeedFactorRun;
+                speedFactor = SpeedFactorRun;
             else
-                movementVector *= SpeedFactorWalk;
+                speedFactor = SpeedFactorWalk;
 
             _animator.SetFloat("velocityX", movementVector.normalized.x);
             _animator.SetFloat("velocityY", movementVector.normalized.y);
-            _animator.SetFloat("speed", movementVector.normalized.magnitude);
+            _animator.SetFloat("speed", movementVector.normalized.magnitude * speedFactor);
 
-            transform.Translate(movementVector);
+            transform.Translate(movementVector * speedFactor);
         }
     }
 }
