@@ -6,6 +6,10 @@ using System;
 
 public class InfectionDistributionAction : MonoBehaviour, IWorldAction {
 
+
+    public float infectionPower = 0.1f;
+
+
     // Use this for initialization
     void Start () {
 		
@@ -18,8 +22,9 @@ public class InfectionDistributionAction : MonoBehaviour, IWorldAction {
 
     public void worldUpdate(WorldController controller, WorldSector sector, int locX, int locY)
     {
-        // TODO
-        throw new NotImplementedException();
+        // increase Infection
+        controller.adjustInfectSector(locX,locY,infectionPower);
     }
+
 
 }

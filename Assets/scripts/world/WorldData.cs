@@ -1,14 +1,18 @@
-﻿using System.Collections;
+﻿using Assets.scripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldData : MonoBehaviour {
+   
 
     public Sprite normalSprite;
     public Sprite infectedSprite;
 
-    private bool isInfected = false;
+    public bool canGetInfected = true;
 
+    public float infection = 0f;
+    private bool lastInfectionState = false;
 
 
     // Use this for initialization
@@ -21,18 +25,24 @@ public class WorldData : MonoBehaviour {
 
     }
 
-    public void switchState(bool infected)
+    public void updateState()
     {
+        if (!canGetInfected)
+            return;
 
-        // change sprite
-        if (infected)
+
+        if (lastInfectionState == IsInfected) {
+            // we don't have to update the sprite since there are no changes
+            return;
+        }
+
+
+        // change sprite if required
+        if (IsInfected)
         {
             if (infectedSprite != null)
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = infectedSprite;
-
-                // update flag on success
-                IsInfected = infected;
             }
 
         }
@@ -41,28 +51,33 @@ public class WorldData : MonoBehaviour {
             if (normalSprite != null)
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = normalSprite;
-
-                // update flag on success
-                IsInfected = infected;
             }
         }
 
+        // update last state helper
+        lastInfectionState = IsInfected;
 
-     
     }
 
     public bool IsInfected
     {
         get
         {
-            return isInfected;
+            return Infection > GameProperties.INFECTION_POINT;
+        }
+    }
+
+    public float Infection
+    {
+        get
+        {
+            return infection;
         }
 
         set
         {
-            isInfected = value;
+            infection = Mathf.Clamp(value, GameProperties.INFECTION_MIN, GameProperties.INFECTION_MAX);
+            updateState();
         }
     }
-
-
 }

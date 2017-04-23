@@ -1,4 +1,5 @@
-﻿using Assets.scripts.world;
+﻿using Assets.scripts;
+using Assets.scripts.world;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,17 +8,16 @@ using UnityEngine;
 /// World Controller
 /// </summary>
 public class WorldController : MonoBehaviour {
-    private static float UPDATE_DELAY = 500.0f;
 
     public Transform[] worldElements;
-    private WorldSector[,] sectors = new WorldSector[29,29];
+    private WorldSector[,] sectors = new WorldSector[GameProperties.WORLD_SIZE, GameProperties.WORLD_SIZE];
 
-
+    private bool init = false;
 
     private float updateTimer = 0.0f;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
 
         // read world data
         readWorldData();
@@ -27,7 +27,12 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-      
+
+
+        // TODO DIRTY timing hotfix for testing
+        if (!init) Init();
+
+
         if (updateTimer <= 0 )
         {
 
@@ -35,7 +40,7 @@ public class WorldController : MonoBehaviour {
             worldUpdate();
 
             // reset timer
-            updateTimer = UPDATE_DELAY;
+            updateTimer = GameProperties.WORLD_UPDATE_DELAY;
         }
         else
         {
@@ -45,13 +50,61 @@ public class WorldController : MonoBehaviour {
 
 	}
 
+    private void Init() {
+        // read world data
+        readWorldData();
+
+        init = true;
+    }
+
+    public void adjustInfectSector(int locX, int locY, float power)
+    {
+
+        List<WorldSector> processedSectors = new List<WorldSector>();
+
+        for (int angle = 0; angle < 360; angle++ ) {
+            for (int distance = 0; distance <= GameProperties.INFECTION_RANGE; distance++)
+            {
+                int posX = locX + (int)(Mathf.Cos(angle) * distance);
+                int posY = locY + (int)(Mathf.Sin(angle) * distance);
+
+                if (!(posX >= 0 && posX < GameProperties.WORLD_SIZE && posY >= 0 && posY < GameProperties.WORLD_SIZE))
+                    continue;
+
+                WorldSector sector = sectors[posX, posY];
+                if (sector == null)
+                    continue;
+
+
+                if (processedSectors.Contains(sector))
+                {
+                    continue;
+                } else {
+                    processedSectors.Add(sector);
+                }
+
+
+                WorldData worldData = sector.WorldData;
+
+                if (worldData == null)
+                    continue;
+
+                worldData.Infection += ((((GameProperties.INFECTION_RANGE - distance) * 100) / GameProperties.INFECTION_RANGE) * power) / 100;
+
+
+            }
+        }
+    }
+
+
+
     private void worldUpdate() {
 
         Debug.Log("World Update!");
 
-        for (int x = 0; x < sectors.GetUpperBound(0); x++)
+        for (int x = 0; x < GameProperties.WORLD_SIZE; x++)
         {
-            for (int y = 0; y < sectors.GetUpperBound(1); y++)
+            for (int y = 0; y < GameProperties.WORLD_SIZE; y++)
             {
 
                 WorldSector sector = sectors[x, y];
@@ -73,19 +126,19 @@ public class WorldController : MonoBehaviour {
         }
     }
 
-
-
-
     private void readWorldData() {
+        Debug.Log("Start reading world of size " + GameProperties.WORLD_SIZE);
 
-        for (int x = 0; x < sectors.GetUpperBound(0); x++)
+        for (int x = 0; x < GameProperties.WORLD_SIZE; x++)
         {
-            for (int y = 0; y < sectors.GetUpperBound(1); y++)
+            for (int y = 0; y < GameProperties.WORLD_SIZE; y++)
             {
                 GameObject currentGameObject = GameObject.Find(getGroundName(x,y));
 
                 if (currentGameObject == null)
                     continue;
+
+                Debug.Log("world ground game object " + x + "-" + y + "detected");
 
                 WorldData data = currentGameObject.GetComponent<WorldData>();
 
@@ -108,7 +161,6 @@ public class WorldController : MonoBehaviour {
                 sector.WorldData = data;
 
                 // set world object
-				// TODO: NOT TESTED
 				foreach (Transform child in currentGameObject.transform) {
 					WorldObject worldObject = child.GetComponent<WorldObject>();
 					if (worldObject != null) {
@@ -120,7 +172,7 @@ public class WorldController : MonoBehaviour {
         }
     }
 
-    private string getGroundName(int x, int y) {
+    public static string getGroundName(int x, int y) {
         return "G-" + x + "-" + y;
     }
 
@@ -143,7 +195,7 @@ public class WorldController : MonoBehaviour {
                     continue;
 
                 // infect
-                data.switchState(true);
+                data.Infection = GameProperties.INFECTION_MAX;
             }
         }
     }
