@@ -7,7 +7,9 @@ using UnityEngine;
 public class CreateTestWorld : MonoBehaviour {
 
     public Vector2[] infectorLocations;
+    public Vector2[] healerLocations;
     public Transform infector;
+    public Transform healer;
     public Transform ground;
 
    
@@ -21,10 +23,39 @@ public class CreateTestWorld : MonoBehaviour {
 
                 groundObj.name = WorldController.getGroundName(x, y);
 
-                foreach (Vector2 location in infectorLocations) {
-                    if (x == location.x && y == location.y)
-                        Instantiate(infector, groundObj);
+                bool alreadyPlaced = false;
+
+
+                // handle infectors
+                if (!alreadyPlaced && infector != null) {
+                    foreach (Vector2 location in infectorLocations)
+                    {
+                        if (x == location.x && y == location.y)
+                        {
+                            Instantiate(infector, groundObj);
+                            alreadyPlaced = true;
+                            break;
+
+                        }
+
+                    }
                 }
+
+                // handle healers
+                if (!alreadyPlaced && healer != null)
+                {
+                    foreach (Vector2 location in healerLocations)
+                    {
+                        if (x == location.x && y == location.y)
+                        {
+                            Instantiate(healer, groundObj);
+                            alreadyPlaced = true;
+                            break;
+                        }
+
+                    }
+                }
+
 
             }
         }
