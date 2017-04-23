@@ -1,0 +1,244 @@
+fileFormatVersion: 2
+guid: e91dcc1514308624b9fde6beea91344b
+timeCreated: 1492971110
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Player_Movement_0
+    21300002: Player_Movement_1
+    21300004: Player_Movement_2
+    21300006: Player_Movement_3
+    21300008: Player_Movement_4
+    21300010: Player_Movement_5
+    21300012: Player_Movement_6
+    21300014: Player_Movement_7
+    21300016: Player_Movement_8
+    21300018: Player_Movement_9
+    21300020: Player_Movement_10
+    21300022: Player_Movement_11
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 128
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Player_Movement_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 95
+        width: 13
+        height: 33
+      alignment: 9
+      pivot: {x: 0.50690675, y: 0.051066544}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_1
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 94
+        width: 16
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5617285, y: 0.1170863}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_2
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 93
+        width: 14
+        height: 35
+      alignment: 9
+      pivot: {x: 0.49999973, y: 0.13059191}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_3
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 96
+        width: 15
+        height: 32
+      alignment: 9
+      pivot: {x: 0.48802847, y: 0.04545498}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_4
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 93
+        width: 15
+        height: 35
+      alignment: 9
+      pivot: {x: 0.49401447, y: 0.1023734}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_5
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 93
+        width: 15
+        height: 35
+      alignment: 9
+      pivot: {x: 0.48802847, y: 0.110069275}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_6
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 48
+        width: 11
+        height: 33
+      alignment: 9
+      pivot: {x: 0.41770867, y: 0.080317065}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_7
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 48
+        width: 16
+        height: 33
+      alignment: 9
+      pivot: {x: 0.51131535, y: 0.06934495}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_8
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 47
+        width: 18
+        height: 35
+      alignment: 9
+      pivot: {x: 0.52011573, y: 0.08102243}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 2
+        width: 17
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5212986, y: 0.070030466}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_10
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 1
+        width: 15
+        height: 35
+      alignment: 9
+      pivot: {x: 0.50603485, y: 0.04998688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Movement_11
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 1
+        width: 16
+        height: 35
+      alignment: 9
+      pivot: {x: 0.57354736, y: 0.06550457}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
