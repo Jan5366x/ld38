@@ -35,5 +35,18 @@ namespace Assets.scripts.world
                 _worldObject = value;
             }
         }
+
+        public bool IsInfected
+        {
+            get
+            {
+                WorldData worldData = WorldData;
+
+                if (worldData == null)
+                    return false;
+
+                return worldData.IsInfected;
+            }
+        }
     }
 }

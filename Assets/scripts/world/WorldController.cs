@@ -9,6 +9,10 @@ using UnityEngine;
 /// </summary>
 public class WorldController : MonoBehaviour {
 
+
+    public static byte INFECTED = 1;
+    public static byte NORMAL = 0;
+
     public Transform[] worldElements;
     private WorldSector[,] sectors = new WorldSector[GameProperties.WORLD_SIZE, GameProperties.WORLD_SIZE];
 
@@ -57,6 +61,58 @@ public class WorldController : MonoBehaviour {
         init = true;
     }
 
+    /// <summary>
+    /// Get Texture Name By Data
+    /// Note: no error handling!
+    /// </summary>
+    public static string GetTextureNameByData(string textureName, byte[,] data) {
+        return textureName + "_" + data[0,0] + "_" + data[1, 0] + "_" + data[2, 0] + "_" + data[0, 1] + "_" + data[2, 1] + "_" + data[0, 2] + "_" + data[1, 2] + "_" + data[2, 2];
+    }
+
+    public byte[,] GetInfectionData(int locX, int locY) {
+        byte[,] result = new byte[3, 3];
+
+
+        byte pointerX = 0;
+        for (int x = locX - 1; x <= locX + 1; x++) {
+            byte pointerY = 0;
+
+            for (int y = locY - 1; y <= locY + 1; y++)
+            {
+                // check world boundrys
+                if (!(x >= 0 && x <= GameProperties.WORLD_SIZE && y >= 0 && y <= GameProperties.WORLD_SIZE))
+                {
+                    result[pointerX, pointerY] = NORMAL;
+                    continue;
+                }
+
+                
+                WorldSector sector = sectors[x, y];
+
+                // no data no infection ;-)
+                if (sector == null) {
+                    result[pointerX, pointerY] = NORMAL;
+                    continue;
+                }
+
+
+                // read sector information
+                if (sector.IsInfected)
+                {
+                    result[pointerX, pointerY] = INFECTED;
+                } else {
+                    result[pointerX, pointerY] = NORMAL;
+                }
+               
+
+                pointerY++;
+            }
+            pointerX++;
+        }
+
+        return result;
+    }
+
     public void adjustInfectSector(int locX, int locY, float power)
     {
 
@@ -68,7 +124,7 @@ public class WorldController : MonoBehaviour {
                 int posX = locX + (int)(Mathf.Cos(angle) * distance);
                 int posY = locY + (int)(Mathf.Sin(angle) * distance);
 
-                if (!(posX >= 0 && posX < GameProperties.WORLD_SIZE && posY >= 0 && posY < GameProperties.WORLD_SIZE))
+                if (!(posX >= 0 && posX <= GameProperties.WORLD_SIZE && posY >= 0 && posY <= GameProperties.WORLD_SIZE))
                     continue;
 
                 WorldSector sector = sectors[posX, posY];
@@ -79,7 +135,9 @@ public class WorldController : MonoBehaviour {
                 if (processedSectors.Contains(sector))
                 {
                     continue;
-                } else {
+                }
+                else
+                {
                     processedSectors.Add(sector);
                 }
 
@@ -89,9 +147,37 @@ public class WorldController : MonoBehaviour {
                 if (worldData == null)
                     continue;
 
+
+                bool wasInfected = worldData.IsInfected;
+
                 worldData.Infection += ((((GameProperties.INFECTION_RANGE - distance) * 100) / GameProperties.INFECTION_RANGE) * power) / 100;
 
+                // state change ?!
+                bool stateChange = wasInfected != worldData.IsInfected;
 
+
+                // force update for all nearby sectors
+
+                if (stateChange)
+                {
+                    for (int x = posX - 1; x <= posX + 1; x++)
+                    {
+                        for (int y = posX - 1; y <= posY + 1; y++)
+                        {
+                            WorldSector updateSector = sectors[x, y];
+                            if (updateSector == null)
+                                continue;
+
+                            WorldData updateWorldData = updateSector.WorldData;
+
+                            if (updateWorldData == null)
+                                continue;
+
+                            updateWorldData.updateState(this, x, y);
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -196,6 +282,7 @@ public class WorldController : MonoBehaviour {
 
                 // infect
                 data.Infection = GameProperties.INFECTION_MAX;
+                data.updateState(this,x, y);
             }
         }
     }

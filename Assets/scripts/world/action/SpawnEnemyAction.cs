@@ -19,12 +19,14 @@ namespace world.action
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.Equals(_player)) StartCoroutine("SpawnEnemies");
+            if (EnemyPrefab != null)
+                if (other.gameObject.Equals(_player)) StartCoroutine("SpawnEnemies");
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.gameObject.Equals(_player)) StopCoroutine("SpawnEnemies");
+            if (EnemyPrefab != null)
+                if (other.gameObject.Equals(_player)) StopCoroutine("SpawnEnemies");
         }
 
         public IEnumerator SpawnEnemies()

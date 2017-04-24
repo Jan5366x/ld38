@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldData : MonoBehaviour {
-   
 
-    public Sprite normalSprite;
-    public Sprite infectedSprite;
+
+    public string infectionTextureTitle = "infection";
 
     public bool canGetInfected = true;
 
     public float infection = 0f;
-    private bool lastInfectionState = false;
+
+    private string currentInfectionTexture = null;
 
 
     // Use this for initialization
@@ -25,38 +25,56 @@ public class WorldData : MonoBehaviour {
 
     }
 
-    public void updateState()
+    public void updateState(WorldController controller, int locX, int locY)
     {
         if (!canGetInfected)
             return;
 
 
-        if (lastInfectionState == IsInfected) {
-            // we don't have to update the sprite since there are no changes
+
+        GameObject infectionLayer = transform.Find("Infection").gameObject;
+        if (infectionLayer == null)
+        {
+            Debug.LogWarning("Missing infection layer child -Infection-");
+            return;
+        }
+
+        // update sprite
+        SpriteRenderer renderer = infectionLayer.GetComponent<SpriteRenderer>();
+       
+        
+        //  handle infection texture removal
+        if (!IsInfected) {
+            renderer.sprite = null;
+            return;
+        }
+
+        byte[,] infectionData = controller.GetInfectionData(locX, locY);
+
+        string systemSprite = WorldController.GetTextureNameByData(infectionTextureTitle, infectionData);
+
+        // check if a update is required
+        if (currentInfectionTexture != null && currentInfectionTexture.Equals(systemSprite)) {
             return;
         }
 
 
-        // change sprite if required
-        if (IsInfected)
+
+        Debug.Log(locX + "-" + locY + " use texture >" + systemSprite + "<");
+
+        Sprite infectionSprite = Resources.Load<Sprite>("infection/" + systemSprite);
+
+
+
+        if (infectionSprite != null)
         {
-            if (infectedSprite != null)
-            {
-                gameObject.GetComponent<SpriteRenderer>().sprite = infectedSprite;
-            }
-
+            // set texture
+            renderer.sprite = infectionSprite;
+            // update current texture
+            currentInfectionTexture = systemSprite;
+        } else {
+            Debug.LogWarning(systemSprite + " sprite not found!");
         }
-        else
-        {
-            if (normalSprite != null)
-            {
-                gameObject.GetComponent<SpriteRenderer>().sprite = normalSprite;
-            }
-        }
-
-        // update last state helper
-        lastInfectionState = IsInfected;
-
     }
 
     public bool IsInfected
@@ -77,7 +95,6 @@ public class WorldData : MonoBehaviour {
         set
         {
             infection = Mathf.Clamp(value, GameProperties.INFECTION_MIN, GameProperties.INFECTION_MAX);
-            updateState();
         }
     }
 }
