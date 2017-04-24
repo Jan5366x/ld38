@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
-using ai.goap;
 using UnityEngine;
 
 namespace logic.character
 {
-    public abstract class Enemy : HitPoints, IGoap
+    public abstract class Enemy : HitPoints, IGOAP
     {
-        public float AggroRange;
-        public float InteractRange;
+        public int speed;
 
-        public HashSet<KeyValuePair<string, object>> GetWorldState()
+        protected float terminalSpeed;
+        protected float initialSpeed;
+        protected float acceleration;
+        protected float minDist = 1.5f;
+        protected float aggroDist = 5f;
+
+        public HashSet<KeyValuePair<string, object>> getWorldState()
         {
             var worldData = new HashSet<KeyValuePair<string, object>>();
             worldData.Add(new KeyValuePair<string, object>("damagePlayer", false));
@@ -17,40 +21,50 @@ namespace logic.character
             return worldData;
         }
 
-        public abstract HashSet<KeyValuePair<string, object>> CreateGoalState();
+        public abstract HashSet<KeyValuePair<string, object>> createGoalState();
 
-        public void PlanFailed(HashSet<KeyValuePair<string, object>> failedGoal)
+        public void planFailed(HashSet<KeyValuePair<string, object>> failedGoal)
         {
         }
 
-        public void PlanFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions)
+        public void planFound(HashSet<KeyValuePair<string, object>> goal, Queue<GOAPAction> actions)
         {
         }
 
-        public void ActionsFinished()
+        public void actionsFinished()
         {
         }
 
-        public void PlanAborted(GoapAction aborter)
+        public void planAborted(GOAPAction aborter)
         {
         }
 
-        public virtual bool MoveAgent(GoapAction nextAction)
+        public virtual bool moveAgent(GOAPAction nextAction)
         {
-            var distance = Vector2.Distance(transform.position, nextAction.Target.transform.position);
-
-            if (distance < AggroRange)
+            var dist = Vector3.Distance(transform.position, nextAction.target.transform.position);
+            if (dist < aggroDist)
             {
-                var parent = GetComponentInParent<Transform>();
-                parent.position = Vector2.MoveTowards(
-                    transform.position,
-                    nextAction.Target.transform.position,
-                    AggroRange
-                );
+                Vector3 moveDirection = nextAction.target.transform.position - transform.position;
+
+                setSpeed(speed);
+
+                if (initialSpeed < terminalSpeed)
+                    initialSpeed += acceleration;
+
+                Vector3 newPosition = moveDirection * initialSpeed * Time.deltaTime;
+                transform.position += newPosition;
             }
-            if (distance < InteractRange) return false;
-            nextAction.SetInRange(true);
+            if (!(dist <= minDist)) return false;
+
+            nextAction.setInRange(true);
             return true;
+        }
+
+        public void setSpeed(float val)
+        {
+            terminalSpeed = val / 10;
+            initialSpeed = (val / 10) / 2;
+            acceleration = (val / 10) / 4;
         }
     }
 }

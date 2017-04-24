@@ -1,37 +1,36 @@
-﻿using ai.goap;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace logic.character.actions
 {
-    public class AttackAction : GoapAction
+    public class AttackAction : GOAPAction
     {
-        private bool _attacked = false;
+        private bool _attacked;
 
         public AttackAction()
         {
-            AddEffect("damagePlayer", true);
-            Cost = 100f;
+            addEffect("damagePlayer", true);
+            cost = 100f;
         }
 
-        public override void Reset()
+        public override void reset()
         {
             _attacked = false;
-            Target = null;
+            target = null;
         }
 
-        public override bool IsDone()
+        public override bool isDone()
         {
             return _attacked;
         }
 
-        public override bool CheckProceduralPrecondition(GameObject agent)
+        public override bool checkProceduralPrecondition(GameObject agent)
         {
-            Target = GameObject.Find("Player");
+            target = GameObject.Find("Player");
 
-            return Target != null;
+            return target != null;
         }
 
-        public override bool Perform(GameObject agent)
+        public override bool perform(GameObject agent)
         {
             Debug.Log("ATTACK!");
 
@@ -40,7 +39,7 @@ namespace logic.character.actions
             return true;
         }
 
-        public override bool RequiresInRange()
+        public override bool requiresInRange()
         {
             return true;
         }

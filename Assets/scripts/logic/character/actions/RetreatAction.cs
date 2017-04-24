@@ -1,19 +1,18 @@
-﻿using ai.goap;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace logic.character.actions
 {
-    public class RetreatAction : GoapAction
+    public class RetreatAction : GOAPAction
     {
-        public float MovementSpeed = 0.5f;
-        private bool _returned = false;
+        public float MovementSpeed = 0.25f;
+        private bool _returned;
         private Vector3 _targetPosition;
-        private bool _isReturning = false;
+        private bool _isReturning;
 
         public RetreatAction()
         {
-            AddEffect("returnToInfector", true);
-            Cost = 200f;
+            addEffect("returnToInfector", true);
+            cost = 200f;
         }
 
         public void Update()
@@ -24,24 +23,24 @@ namespace logic.character.actions
             if (current.position == _targetPosition) _isReturning = false;
         }
 
-        public override void Reset()
+        public override void reset()
         {
             _returned = false;
             _targetPosition = new Vector2();
             _isReturning = false;
-            Target = null;
+            target = null;
         }
 
-        public override bool IsDone()
+        public override bool isDone()
         {
             return _returned;
         }
 
-        public override bool CheckProceduralPrecondition(GameObject agent)
+        public override bool checkProceduralPrecondition(GameObject agent)
         {
-            Target = FindClosestInfector();
+            target = FindClosestInfector();
 
-            return Target != null;
+            return target != null;
         }
 
         private GameObject FindClosestInfector()
@@ -65,20 +64,18 @@ namespace logic.character.actions
             return found ? closest : null;
         }
 
-        public override bool Perform(GameObject agent)
+        public override bool perform(GameObject agent)
         {
-            var enemy = agent.GetComponent<Enemy>();
-
             _isReturning = true;
-            _targetPosition = Target.transform.position;
+            _targetPosition = target.transform.position;
 
             _returned = true;
             return true;
         }
 
-        public override bool RequiresInRange()
+        public override bool requiresInRange()
         {
-            return true;
+            return false;
         }
     }
 }
