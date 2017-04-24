@@ -72,9 +72,12 @@ public class WorldController : MonoBehaviour {
 
 
     private void handleItemSpawning() {
+
+        if (items.Length == 0)
+            return;
+
         if (itemSpawnTimer <= 0)
         {
-
             for (int attempt = 0; attempt < GameProperties.ITEM_SPAWN_ATTEMPTS; attempt++) {
                 // handle random spawn
                 int rndX = Random.Range(0, GameProperties.WORLD_SIZE);
@@ -95,7 +98,18 @@ public class WorldController : MonoBehaviour {
                 if (!worldData.CanPlaceItem())
                     continue;
 
-                // TODO SPAWN!!!!
+                string locName = "G-" + rndX + "-" + rndY;
+                GameObject ground = GameObject.Find(locName);
+
+                if (ground == null)
+                {
+                    Debug.LogError(locName + " not found!");
+                    continue;
+                }
+
+                Instantiate(infector, items[Random.Range(0, items.Length-1)]);
+
+                Debug.Log("Item spawned at: " + locName);
             }
 
             // reset timer
@@ -133,7 +147,6 @@ public class WorldController : MonoBehaviour {
                 if (!worldData.CanPlaceInfector())
                     continue;
 
-                // TODO SPAWN!!!!
 
                 string locName = "G-" + rndX + "-" + rndY;
                 GameObject ground = GameObject.Find(locName);

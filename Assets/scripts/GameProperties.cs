@@ -26,8 +26,8 @@ namespace Assets.scripts
         public static float INFECTOR_SPAWN_DELAY = 0.1f;
         public static int INFECTOR_SPAWN_ATTEMPTS = 30;
 
-        public static float ITEM_SPAWN_DELAY = 1f;
-        public static int ITEM_SPAWN_ATTEMPTS = 3;
+        public static float ITEM_SPAWN_DELAY = 0.1f;
+        public static int ITEM_SPAWN_ATTEMPTS = 30;
 
         // player settings
         // health
