@@ -17,9 +17,9 @@ namespace logic.character
 
         public void Start()
         {
-            _healthBar = GameObject.Find("Canvas/HealthBar/Mask/Content");
-            _staminaBar = GameObject.Find("Canvas/StaminaBar/Mask/Content");
-            _pickupCounter = GameObject.Find("Canvas/PickupCounter/PickupCount");
+            _healthBar = GameObject.Find("MainUI/HealthBar/Mask/Content");
+            _staminaBar = GameObject.Find("MainUI/StaminaBar/Mask/Content");
+            _pickupCounter = GameObject.Find("MainUI/PickupCounter/PickupCount");
 
             Image healthBarImage = null;
             if (_healthBar != null) healthBarImage = _healthBar.GetComponent<Image>();

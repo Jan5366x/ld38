@@ -8,6 +8,7 @@ namespace logic.character.stats
         public Pickups(Text counterText)
         {
             _counterText = counterText;
+            UpdateCounter();
         }
 
         private readonly Text _counterText;
