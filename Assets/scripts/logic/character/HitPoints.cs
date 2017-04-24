@@ -1,35 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace logic.character
 {
-    public class HitPoints : MonoBehaviour
+    public class HitPoints : BarStat
     {
-        public int StartingHitPoints = 100;
-        private int _currentHitPoints;
-        private bool _dead;
-
-
-        // Use this for initialization
-        public void Start()
+        public HitPoints(Image content) : base(content)
         {
-            _currentHitPoints = StartingHitPoints;
-            if (_currentHitPoints > 0) _dead = false;
-        }
-
-        // Update is called once per frame
-        public void Update()
-        {
-            if (_currentHitPoints <= 0) _dead = true;
+            MaxValue = 100;
+            MinValue = 0;
         }
 
         public bool IsDead()
         {
-            return _dead;
-        }
-
-        public void AdjustHealth(int damage)
-        {
-            _currentHitPoints += damage;
+            return CurrentValue >= MinValue;
         }
     }
 }

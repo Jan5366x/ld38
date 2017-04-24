@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using Assets.scripts;
+using logic.character;
+using UnityEngine;
 
 namespace movement
 {
@@ -11,10 +14,27 @@ namespace movement
 
         private Animator _animator;
 
+        private Stamina _stamina;
+
         // Use this for initialization
         void Start()
         {
             _animator = GetComponent<Animator>();
+            _stamina = GetComponentInParent<PlayerLogic>().Stamina;
+
+            StartCoroutine("StaminaRegen");
+        }
+
+        public IEnumerator StaminaRegen()
+        {
+            for (;;)
+            {
+                if (Input.GetButton("Sprint")) yield return new WaitForEndOfFrame();
+
+                _stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
+
+                yield return new WaitForSeconds(GameProperties.PLAYER_STAMINA_RECOVERY_RATE_SECONDS);
+            }
         }
 
         // Update is called once per frame
@@ -24,10 +44,12 @@ namespace movement
                                  * Time.deltaTime * BaseSpeed;
 
             float speedFactor;
-            if (Input.GetButton("Sprint") || SprintOverride)
+            if (Input.GetButton("Sprint") && _stamina.CurrentValue > _stamina.MinValue || SprintOverride)
+            {
+                _stamina.CurrentValue -= GameProperties.PLAYER_STAMINA_DEC_RATE_FRAME;
                 speedFactor = SpeedFactorRun;
-            else
-                speedFactor = SpeedFactorWalk;
+            }
+            else speedFactor = SpeedFactorWalk;
 
             _animator.SetFloat("velocityX", movementVector.normalized.x);
             _animator.SetFloat("velocityY", movementVector.normalized.y);

@@ -18,5 +18,10 @@ namespace Assets.scripts
         public static float INFECTION_MAX = 1.0f;
         public static int INFECTION_RANGE = 4;
 
+        // player settings
+        public static int PLAYER_STAMINA = 500;
+        public static int PLAYER_STAMINA_DEC_RATE_FRAME = 1;
+        public static int PLAYER_STAMINA_RECOVERY = 20;
+        public static int PLAYER_STAMINA_RECOVERY_RATE_SECONDS = 1;
     }
 }
