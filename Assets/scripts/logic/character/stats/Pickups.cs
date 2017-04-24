@@ -8,6 +8,8 @@ namespace logic.character.stats
         public Pickups(Text counterText)
         {
             _counterText = counterText;
+            _counterValue = GameProperties.PLAYER_STARTING_PICKUPS;
+
             UpdateCounter();
         }
 

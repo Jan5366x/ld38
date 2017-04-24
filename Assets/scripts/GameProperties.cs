@@ -31,5 +31,7 @@ namespace Assets.scripts
         public static int PLAYER_STAMINA_DEC_RATE_FRAME = 1;
         public static int PLAYER_STAMINA_RECOVERY = 20;
         public static int PLAYER_STAMINA_RECOVERY_RATE_SECONDS = 1;
+        // pickups
+        public static int PLAYER_STARTING_PICKUPS = 50; //TODO: debug value, for testing only
     }
 }

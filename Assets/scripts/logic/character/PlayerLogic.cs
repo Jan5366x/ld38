@@ -7,6 +7,8 @@ namespace logic.character
 {
     public class PlayerLogic : MonoBehaviour
     {
+        [SerializeField] private GameObject _healerObject;
+
         private GameObject _healthBar;
         private GameObject _staminaBar;
         private GameObject _pickupCounter;
@@ -38,6 +40,29 @@ namespace logic.character
             Pickups = new Pickups(pickupCounterText);
         }
 
+        private void BuildHealer()
+        {
+            var tileName = GetCurrentTileName();
+            var groundTile = GameObject.Find(tileName);
+            if (groundTile == null) return;
+
+            var worldData = groundTile.GetComponent<WorldData>();
+
+            if (
+                worldData == null
+                || !worldData.CanPlaceHealer()
+                || !Pickups.BuildHealer()
+                || _healerObject == null
+            ) return;
+
+            Instantiate(_healerObject, groundTile.transform);
+        }
+
+        private string GetCurrentTileName()
+        {
+            return "G-" + Mathf.RoundToInt(transform.position.x) + "-" + -Mathf.RoundToInt(transform.position.y);
+        }
+
         public void Update()
         {
 #if UNITY_EDITOR
@@ -54,7 +79,7 @@ namespace logic.character
                 Pickups.Increment();
             }
             if (!Input.GetKeyDown(KeyCode.B)) return;
-            Debug.LogWarning(Pickups.BuildHealer() ? "HEALER SPAWNED BRAH" : "NOT ENOUGH PICKUPS BRAH");
+            BuildHealer();
 #endif
         }
     }
