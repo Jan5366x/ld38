@@ -309,7 +309,7 @@ public class WorldController : MonoBehaviour {
 
     private void worldUpdate() {
 
-        Debug.Log("World Update!");
+        // Debug.Log("World Update!");
 
         for (int x = 0; x < GameProperties.WORLD_SIZE; x++)
         {
