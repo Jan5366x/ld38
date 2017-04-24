@@ -11,6 +11,7 @@ namespace Assets.scripts
         // world setting
         public static int WORLD_SIZE = 20;
         public static float WORLD_UPDATE_DELAY = 3.5f;
+        public static bool COMPLEX_INFECTION = false;
 
         // infection settings
         public static float INFECTION_MIN = 0.0f;

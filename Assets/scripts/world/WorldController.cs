@@ -3,6 +3,7 @@ using Assets.scripts.world;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -24,7 +25,11 @@ public class WorldController : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        setupSpriteData();
+
+
+        // handle compex infection data
+        if (GameProperties.COMPLEX_INFECTION) 
+            setupSpriteData();
 
         // read world data
         readWorldData();
@@ -74,18 +79,70 @@ public class WorldController : MonoBehaviour {
         }
     }
 
+
+    public bool isSpriteDataKnown(byte[,] request) {
+        foreach (byte[,] data in infectionSpriteData)
+        {
+
+            bool match = true;
+            for (byte x = 0; x <= 2; x++)
+            {
+                for (byte y = 0; y <= 2; y++)
+                {
+                    if (request[x, y] != data[x, y])
+                    {
+                        match = false;
+                    }
+                }
+            }
+
+            if (match)
+                return true;
+        }
+
+        return false;
+    }
+
+    public byte[,] requestAlternativInfectionSprite(byte[,] request) {
+        int bestQuality = 0;
+        byte[,] bestResult = new byte[3, 3];
+
+
+        foreach (byte[,] data in infectionSpriteData)
+        {
+            int quality = 0;
+            for (byte x = 0; x <= 2; x++) {
+                for (byte y = 0; y <= 2; y++)
+                {
+                    if (/*request[x, y]  == NORMAL &&*/ request[x, y] == data[x, y]) {
+                        quality++;
+                    }
+                }
+            }
+
+            if (quality > bestQuality) {
+                bestQuality = quality;
+                bestResult = data;
+            }
+        }
+
+
+            // no result
+            return bestResult;
+    }
+
     private void setupSpriteData() {
 
 
         Debug.Log(Application.dataPath);
 
 
-        DirectoryInfo dir = new DirectoryInfo(Application.dataPath + "/Misc/Resources/infection/");
+        DirectoryInfo dir = new DirectoryInfo(Application.dataPath + "/Misc/Resources/infection/complex/");
         FileInfo[] info = dir.GetFiles("*.png");
         foreach (FileInfo file in info) {
-            string[] rawData = file.Name.ToLower().Replace(".png","").Split('_');
+            string[] rawData = file.Name.ToLower().Replace(".png","").Replace("infection_","").Split('_');
 
-            if (rawData.GetUpperBound(0) == 8)
+            if (rawData.GetUpperBound(0) == 7)
             {
                 byte[,] newData = new byte[3, 3];
                 newData[0, 0] = getDataValue(rawData[0]);
@@ -161,7 +218,16 @@ public class WorldController : MonoBehaviour {
             pointerX++;
         }
 
-        return result;
+
+        // process result
+
+        if (isSpriteDataKnown(result)) {
+            return result;
+        } else {
+            return requestAlternativInfectionSprite(result);
+        }
+        
+   
     }
 
     public void adjustInfectSector(int locX, int locY, float power)
@@ -208,7 +274,11 @@ public class WorldController : MonoBehaviour {
 
 
                 // force update for all nearby sectors
+                worldData.updateState(this, posX, locY);
 
+
+
+                /* old code from complex code (don't delete yet!)
                 if (stateChange)
                 {
                     for (int x = posX - 1; x <= posX + 1; x++)
@@ -229,6 +299,8 @@ public class WorldController : MonoBehaviour {
                         }
                     }
                 }
+
+    */
             }
         }
     }
@@ -275,14 +347,14 @@ public class WorldController : MonoBehaviour {
                 if (currentGameObject == null)
                     continue;
 
-                Debug.Log("world ground game object " + x + "-" + y + "detected");
+              //  Debug.Log("world ground game object " + x + "-" + y + "detected");
 
                 WorldData data = currentGameObject.GetComponent<WorldData>();
 
                 if (data == null)
                     continue;
 
-                Debug.Log("world data " + x + "-" + y + "detected");
+              //  Debug.Log("world data " + x + "-" + y + "detected");
 
 
                 // handle lazy load

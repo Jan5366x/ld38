@@ -50,8 +50,19 @@ public class WorldData : MonoBehaviour {
         }
 
         byte[,] infectionData = controller.GetInfectionData(locX, locY);
+        string systemSprite;
 
-        string systemSprite = WorldController.GetTextureNameByData(infectionTextureTitle, infectionData);
+        if (GameProperties.COMPLEX_INFECTION)
+        {
+            // complex system
+            systemSprite = "infection/complex/" + WorldController.GetTextureNameByData(infectionTextureTitle, infectionData);
+        }
+        else {
+            systemSprite = "infection/large_infection"; 
+        }
+
+       
+
 
         // check if a update is required
         if (currentInfectionTexture != null && currentInfectionTexture.Equals(systemSprite)) {
@@ -59,10 +70,9 @@ public class WorldData : MonoBehaviour {
         }
 
 
+        // Debug.Log(locX + "-" + locY + " use texture >" + systemSprite + "<");
 
-        Debug.Log(locX + "-" + locY + " use texture >" + systemSprite + "<");
-
-        Sprite infectionSprite = Resources.Load<Sprite>("infection/" + systemSprite);
+        Sprite infectionSprite = Resources.Load<Sprite>(systemSprite);
 
 
 
