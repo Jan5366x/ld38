@@ -17,8 +17,16 @@ namespace logic.character
             _healthBar = GameObject.Find("Canvas/HealthBar/Mask/Content");
             _staminaBar = GameObject.Find("Canvas/StaminaBar/Mask/Content");
 
-            HitPoints = new HitPoints(_healthBar.GetComponent<Image>());
-            Stamina = new Stamina(_staminaBar.GetComponent<Image>());
+            Image healthBarImage = null;
+            if (_healthBar != null) healthBarImage = _healthBar.GetComponent<Image>();
+            else Debug.LogWarning("Health Bar not found.");
+
+            Image staminaBarImage = null;
+            if (_staminaBar != null) staminaBarImage = _staminaBar.GetComponent<Image>();
+            else Debug.LogWarning("Stamina Bar not found.");
+
+            HitPoints = new HitPoints(healthBarImage);
+            Stamina = new Stamina(staminaBarImage);
         }
     }
 }

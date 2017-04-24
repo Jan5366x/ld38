@@ -31,7 +31,10 @@ namespace ui.StatusBars
 
         public void UpdateBar()
         {
-            _content.fillAmount = _fillAmount;
+            if (_content != null)
+            {
+                _content.fillAmount = _fillAmount;
+            }
         }
 
         private float MapStatToBar(int statVal)
