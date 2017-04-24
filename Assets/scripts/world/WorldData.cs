@@ -109,7 +109,16 @@ public class WorldData : MonoBehaviour {
     }
 
     public bool CanPlaceHealer() {
-        // TODO
-        return true;
+        return canGetInfected && !IsInfected && !HasWorldObject();
+    }
+
+    public bool HasWorldObject() {
+        foreach (Transform child in transform) {
+            if (GetComponent<WorldObject>() != null)
+                return true;
+        }
+
+        return false;
+           
     }
 }
