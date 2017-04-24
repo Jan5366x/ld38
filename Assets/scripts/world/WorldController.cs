@@ -107,7 +107,7 @@ public class WorldController : MonoBehaviour {
                     continue;
                 }
 
-                Instantiate(infector, items[Random.Range(0, items.Length-1)]);
+                Instantiate(items[Random.Range(0, items.Length-1)], ground.transform);
 
                 Debug.Log("Item spawned at: " + locName);
             }
