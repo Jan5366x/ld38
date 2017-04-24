@@ -2,6 +2,7 @@
 using Assets.scripts.world;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -15,6 +16,7 @@ public class WorldController : MonoBehaviour {
 
     public Transform[] worldElements;
     private WorldSector[,] sectors = new WorldSector[GameProperties.WORLD_SIZE, GameProperties.WORLD_SIZE];
+    private List<byte[,]> infectionSpriteData = new List<byte[,]>();
 
     private bool init = false;
 
@@ -22,6 +24,7 @@ public class WorldController : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
+        setupSpriteData();
 
         // read world data
         readWorldData();
@@ -60,6 +63,54 @@ public class WorldController : MonoBehaviour {
 
         init = true;
     }
+
+
+    private byte getDataValue(string entry) {
+        if (entry.Equals("0"))
+        {
+            return NORMAL;
+        } else {
+            return INFECTED;
+        }
+    }
+
+    private void setupSpriteData() {
+
+
+        Debug.Log(Application.dataPath);
+
+
+        DirectoryInfo dir = new DirectoryInfo(Application.dataPath + "/Misc/Resources/infection/");
+        FileInfo[] info = dir.GetFiles("*.png");
+        foreach (FileInfo file in info) {
+            string[] rawData = file.Name.ToLower().Replace(".png","").Split('_');
+
+            if (rawData.GetUpperBound(0) == 8)
+            {
+                byte[,] newData = new byte[3, 3];
+                newData[0, 0] = getDataValue(rawData[0]);
+                newData[1, 0] = getDataValue(rawData[1]);
+                newData[2, 0] = getDataValue(rawData[2]);
+
+                newData[0, 1] = getDataValue(rawData[3]);
+                newData[1, 1] = INFECTED;
+                newData[2, 1] = getDataValue(rawData[4]);
+
+                newData[0, 2] = getDataValue(rawData[5]);
+                newData[1, 2] = getDataValue(rawData[6]);
+                newData[2, 2] = getDataValue(rawData[7]);
+
+                infectionSpriteData.Add(newData);
+            }
+            else {
+                Debug.LogWarning("Invalid infection sprite file " + file.Name + " detected!");
+            }
+        }
+
+
+           
+    }
+
 
     /// <summary>
     /// Get Texture Name By Data
