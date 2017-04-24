@@ -107,4 +107,9 @@ public class WorldData : MonoBehaviour {
             infection = Mathf.Clamp(value, GameProperties.INFECTION_MIN, GameProperties.INFECTION_MAX);
         }
     }
+
+    public bool CanPlaceHealer() {
+        // TODO
+        return true;
+    }
 }
