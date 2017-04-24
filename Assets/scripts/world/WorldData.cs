@@ -112,13 +112,32 @@ public class WorldData : MonoBehaviour {
         return canGetInfected && !IsInfected && !HasWorldObject();
     }
 
+    public bool CanPlaceInfector()
+    {
+        return canGetInfected && IsInfected && !HasWorldObject();
+    }
+
+    public bool CanPlaceItem()
+    {
+        return canGetInfected && !IsInfected;
+    }
+
     public bool HasWorldObject() {
-        foreach (Transform child in transform) {
-            if (GetComponent<WorldObject>() != null)
-                return true;
+        return GetWorldObject() != null;
+    }
+
+    public WorldObject GetWorldObject()
+    {
+        foreach (Transform child in transform)
+        {
+            WorldObject wObj = child.GetComponent<WorldObject>();
+
+            if (wObj != null)
+                return wObj;
+
+
         }
 
-        return false;
-           
+        return null;
     }
 }

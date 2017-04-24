@@ -8,7 +8,6 @@ namespace Assets.scripts.world
     public class WorldSector
     {
         private WorldData _worldData;
-        private WorldObject _worldObject;
 
         public WorldData WorldData
         {
@@ -27,12 +26,10 @@ namespace Assets.scripts.world
         {
             get
             {
-                return _worldObject;
-            }
+                if (WorldData == null)
+                    return null;
 
-            set
-            {
-                _worldObject = value;
+                return WorldData.GetWorldObject();
             }
         }
 

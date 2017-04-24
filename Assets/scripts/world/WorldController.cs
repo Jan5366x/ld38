@@ -10,18 +10,22 @@ using UnityEngine;
 /// World Controller
 /// </summary>
 public class WorldController : MonoBehaviour {
-
-
     public static byte INFECTED = 1;
     public static byte NORMAL = 0;
 
-    public Transform[] worldElements;
+    public Transform infector;
+    public Transform[] items;
+
     private WorldSector[,] sectors = new WorldSector[GameProperties.WORLD_SIZE, GameProperties.WORLD_SIZE];
     private List<byte[,]> infectionSpriteData = new List<byte[,]>();
 
     private bool init = false;
 
     private float updateTimer = 0.0f;
+    private float itemSpawnTimer = 0.0f;
+    private float infectorSpawnTimer = 0.0f;
+
+
 
     // Use this for initialization
     void Awake () {
@@ -51,6 +55,10 @@ public class WorldController : MonoBehaviour {
             // run logic
             worldUpdate();
 
+            // handle spawn logic
+            handleInfectorSpawning();
+            handleItemSpawning();
+
             // reset timer
             updateTimer = GameProperties.WORLD_UPDATE_DELAY;
         }
@@ -61,6 +69,93 @@ public class WorldController : MonoBehaviour {
         }
 
 	}
+
+
+    private void handleItemSpawning() {
+        if (itemSpawnTimer <= 0)
+        {
+
+            for (int attempt = 0; attempt < GameProperties.ITEM_SPAWN_ATTEMPTS; attempt++) {
+                // handle random spawn
+                int rndX = Random.Range(0, GameProperties.WORLD_SIZE);
+                int rndY = Random.Range(0, GameProperties.WORLD_SIZE);
+
+
+                WorldSector sector = sectors[rndX, rndY];
+
+                if (sector == null)
+                    continue;
+
+                WorldData worldData = sector.WorldData;
+
+                if (worldData == null)
+                    continue;
+
+
+                if (!worldData.CanPlaceItem())
+                    continue;
+
+                // TODO SPAWN!!!!
+            }
+
+            // reset timer
+            itemSpawnTimer = GameProperties.ITEM_SPAWN_DELAY;
+        }
+        else
+        {
+            // update timer
+            itemSpawnTimer -= Time.deltaTime;
+        }
+    }
+
+
+    private void handleInfectorSpawning()
+    {
+        if (infectorSpawnTimer <= 0)
+        {
+            for (int attempt = 0; attempt < GameProperties.INFECTOR_SPAWN_ATTEMPTS; attempt++)
+            {
+                // handle random spawn
+                int rndX = Random.Range(0, GameProperties.WORLD_SIZE);
+                int rndY = Random.Range(0, GameProperties.WORLD_SIZE);
+
+                WorldSector sector = sectors[rndX, rndY];
+
+                if (sector == null)
+                    continue;
+
+                WorldData worldData = sector.WorldData;
+
+                if (worldData == null)
+                    continue;
+
+
+                if (!worldData.CanPlaceInfector())
+                    continue;
+
+                // TODO SPAWN!!!!
+
+                string locName = "G-" + rndX + "-" + rndY;
+                GameObject ground = GameObject.Find(locName);
+
+                if (ground == null) {
+                    Debug.LogError(locName + " not found!");
+                    continue;
+                }
+
+                Instantiate(infector, ground.transform);
+                Debug.Log("Infector spawned at: " + locName);
+            }
+
+            // reset timer
+            infectorSpawnTimer = GameProperties.INFECTOR_SPAWN_DELAY;
+        }
+        else
+        {
+            // update timer
+            infectorSpawnTimer -= Time.deltaTime;
+        }
+    }
 
     private void Init() {
         // read world data
@@ -368,15 +463,6 @@ public class WorldController : MonoBehaviour {
 
                 // set world data
                 sector.WorldData = data;
-
-                // set world object
-				foreach (Transform child in currentGameObject.transform) {
-					WorldObject worldObject = child.GetComponent<WorldObject>();
-					if (worldObject != null) {
-						sectors [x, y].WorldObject = worldObject;
-						break;
-					}
-				}
             }
         }
     }

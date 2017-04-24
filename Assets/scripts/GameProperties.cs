@@ -10,7 +10,7 @@ namespace Assets.scripts
 
         // world setting
         public static int WORLD_SIZE = 50;
-        public static float WORLD_UPDATE_DELAY = 3.5f;
+        public static float WORLD_UPDATE_DELAY = 3.0f;
         public static bool COMPLEX_INFECTION = false;
 
         // healer settings
@@ -21,6 +21,13 @@ namespace Assets.scripts
         public static float INFECTION_POINT = 0.8f;
         public static float INFECTION_MAX = 1.0f;
         public static int INFECTION_RANGE = 4;
+
+        // spawning
+        public static float INFECTOR_SPAWN_DELAY = 0.1f;
+        public static int INFECTOR_SPAWN_ATTEMPTS = 30;
+
+        public static float ITEM_SPAWN_DELAY = 1f;
+        public static int ITEM_SPAWN_ATTEMPTS = 3;
 
         // player settings
         // health
