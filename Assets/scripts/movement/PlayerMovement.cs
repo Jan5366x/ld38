@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.scripts;
 using logic.character;
+using logic.character.stats;
 using UnityEngine;
 
 namespace movement
@@ -29,7 +30,7 @@ namespace movement
         {
             for (;;)
             {
-                if (Input.GetButton("Sprint")) yield return new WaitForEndOfFrame();
+                if (Input.GetButton("Sprint")) yield return new WaitWhile(() => Input.GetButton("Sprint"));
 
                 _stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
 
@@ -40,7 +41,7 @@ namespace movement
         // Update is called once per frame
         void FixedUpdate()
         {
-            var movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized
+                var movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized
                                  * Time.deltaTime * BaseSpeed;
 
             float speedFactor;

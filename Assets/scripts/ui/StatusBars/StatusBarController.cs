@@ -1,5 +1,4 @@
-﻿using logic.character;
-using UnityEngine;
+﻿using logic.character.stats;
 using UnityEngine.UI;
 
 namespace ui.StatusBars
