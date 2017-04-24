@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 namespace ui
 {
@@ -12,7 +8,6 @@ namespace ui
         private static Text _timerText;
         private float _startTime;
 
-
         private void Start()
         {
             var timerObj = GameObject.Find("MainUI/Timer");
@@ -20,7 +15,6 @@ namespace ui
 
             _startTime = Time.time;
         }
-
 
         private void FixedUpdate()
         {
