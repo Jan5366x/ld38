@@ -8,10 +8,13 @@ namespace logic.character
     public class PlayerLogic : MonoBehaviour
     {
         [SerializeField] private GameObject _healerObject;
+        [SerializeField] private GameObject _deathMessageBoxPrefab;
 
+        private GameObject _mainUi;
         private GameObject _healthBar;
         private GameObject _staminaBar;
         private GameObject _pickupCounter;
+        private GameObject _deathMessageBox;
 
         private EnemyAttackLogic _enemyInRange;
         private float _lastAttack;
@@ -22,6 +25,7 @@ namespace logic.character
 
         public void Start()
         {
+            _mainUi = GameObject.Find("MainUI");
             _healthBar = GameObject.Find("MainUI/HealthBar/Mask/Content");
             _staminaBar = GameObject.Find("MainUI/StaminaBar/Mask/Content");
             _pickupCounter = GameObject.Find("MainUI/PickupCounter/PickupCount");
@@ -84,6 +88,15 @@ namespace logic.character
 
         public void Update()
         {
+            if (HitPoints.Dead)
+            {
+                if (_mainUi != null && _deathMessageBox == null)
+                {
+                    _deathMessageBox = Instantiate(_deathMessageBoxPrefab, _mainUi.transform);
+                }
+                return;
+            }
+
             if (Input.GetButtonDown("Build"))
             {
                 BuildHealer();

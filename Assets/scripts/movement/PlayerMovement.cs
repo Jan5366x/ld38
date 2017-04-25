@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Assets.scripts;
 using logic.character;
-using logic.character.stats;
 using UnityEngine;
 
 namespace movement
@@ -14,14 +13,13 @@ namespace movement
         public bool SprintOverride;
 
         private Animator _animator;
-
-        private Stamina _stamina;
+        private PlayerLogic _player;
 
         // Use this for initialization
         void Start()
         {
             _animator = GetComponent<Animator>();
-            _stamina = GetComponentInParent<PlayerLogic>().Stamina;
+            _player = GetComponentInParent<PlayerLogic>();
 
             StartCoroutine("StaminaRegen");
         }
@@ -32,7 +30,7 @@ namespace movement
             {
                 if (Input.GetButton("Sprint")) yield return new WaitWhile(() => Input.GetButton("Sprint"));
 
-                _stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
+                _player.Stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
 
                 yield return new WaitForSeconds(GameProperties.PLAYER_STAMINA_RECOVERY_RATE_SECONDS);
             }
@@ -41,13 +39,18 @@ namespace movement
         // Update is called once per frame
         void FixedUpdate()
         {
-                var movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized
+            if (_player.HitPoints.Dead)
+            {
+                StopAllCoroutines();
+                return;
+            }
+            var movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized
                                  * Time.deltaTime * BaseSpeed;
 
             float speedFactor;
-            if (Input.GetButton("Sprint") && _stamina.CurrentValue > _stamina.MinValue || SprintOverride)
+            if (Input.GetButton("Sprint") && _player.Stamina.CurrentValue > _player.Stamina.MinValue || SprintOverride)
             {
-                _stamina.CurrentValue -= GameProperties.PLAYER_STAMINA_DEC_RATE_FRAME;
+                _player.Stamina.CurrentValue -= GameProperties.PLAYER_STAMINA_DEC_RATE_FRAME;
                 speedFactor = SpeedFactorRun;
             }
             else speedFactor = SpeedFactorWalk;
