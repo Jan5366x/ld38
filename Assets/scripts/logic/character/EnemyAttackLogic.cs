@@ -10,6 +10,7 @@ namespace logic.character
         [SerializeField] private float _attackRate = 1.0f;
 
         private PlayerLogic _player;
+        private Animator _animator;
         public HitPoints HitPoints { get; private set; }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -18,11 +19,23 @@ namespace logic.character
 
             _player = other.GetComponentInParent<PlayerLogic>();
             StartCoroutine("Attack");
+
+            if (_animator != null)
+            {
+                _animator.SetBool("aggressiv", true);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.name == "Player") StopCoroutine("Attack");
+            if (other.name != "Player") return;
+
+            StopCoroutine("Attack");
+
+            if (_animator != null)
+            {
+                _animator.SetBool("aggressiv", false);
+            }
         }
 
         private IEnumerator Attack()
@@ -38,11 +51,15 @@ namespace logic.character
         void Start()
         {
             HitPoints = new HitPoints(null, 0, 50);
+            _animator = gameObject.GetComponent<Animator>();
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
+            if (HitPoints.Dead)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

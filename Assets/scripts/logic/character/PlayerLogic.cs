@@ -13,6 +13,9 @@ namespace logic.character
         private GameObject _staminaBar;
         private GameObject _pickupCounter;
 
+        private EnemyAttackLogic _enemyInRange;
+        private float _lastAttack;
+
         public HitPoints HitPoints { get; private set; }
         public Stamina Stamina { get; private set; }
         public Pickups Pickups { get; private set; }
@@ -63,24 +66,42 @@ namespace logic.character
             return "G-" + Mathf.RoundToInt(transform.position.x) + "-" + -Mathf.RoundToInt(transform.position.y);
         }
 
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (other.GetComponentInParent<EnemyAttackLogic>() != null)
+            {
+                _enemyInRange = other.GetComponentInParent<EnemyAttackLogic>();
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.GetComponentInParent<EnemyAttackLogic>() != null)
+            {
+                _enemyInRange = null;
+            }
+        }
+
         public void Update()
         {
-#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Build"))
             {
-                HitPoints.CurrentValue -= 10;
+                BuildHealer();
             }
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (!Input.GetButton("Attack")) return;
+
+            if (_enemyInRange != null)
             {
-                HitPoints.CurrentValue += 10;
+                Attack();
             }
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                Pickups.Increment();
-            }
-            if (!Input.GetKeyDown(KeyCode.B)) return;
-            BuildHealer();
-#endif
+        }
+
+        private void Attack()
+        {
+            if (Time.time - _lastAttack < GameProperties.PLAYER_ATTACK_RATE) return;
+
+            _enemyInRange.HitPoints.CurrentValue -= GameProperties.PLAYER_ATTACK;
+            _lastAttack = Time.time;
         }
     }
 }
