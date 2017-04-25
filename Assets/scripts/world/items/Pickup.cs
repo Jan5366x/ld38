@@ -5,7 +5,7 @@ namespace world.items
 {
     public class Pickup : MonoBehaviour
     {
-        [SerializeField] private int _healOnPickup = 10;
+        [SerializeField] private int _healOnPickup = 3;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
