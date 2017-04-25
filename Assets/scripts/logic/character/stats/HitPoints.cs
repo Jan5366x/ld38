@@ -23,7 +23,6 @@ namespace logic.character.stats
         private void Die()
         {
             Dead = true;
-            Debug.LogWarning("YOU ARE DEAD!");
         }
     }
 }

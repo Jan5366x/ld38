@@ -1,4 +1,5 @@
-﻿using Assets.scripts;
+﻿using System.Collections;
+using Assets.scripts;
 using logic.character.stats;
 using UnityEngine;
 using UnityEngine.UI;
