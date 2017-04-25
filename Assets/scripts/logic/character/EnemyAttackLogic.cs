@@ -8,6 +8,7 @@ namespace logic.character
     {
         [SerializeField] private int _damage = 10;
         [SerializeField] private float _attackRate = 1.0f;
+        [SerializeField] private int _hitPoints = 10;
 
         private PlayerLogic _player;
         private Animator _animator;
@@ -50,7 +51,7 @@ namespace logic.character
         // Use this for initialization
         void Start()
         {
-            HitPoints = new HitPoints(null, 0, 50);
+            HitPoints = new HitPoints(null, 0, _hitPoints);
             _animator = gameObject.GetComponent<Animator>();
         }
 
