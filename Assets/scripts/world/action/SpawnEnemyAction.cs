@@ -6,36 +6,27 @@ namespace world.action
     public class SpawnEnemyAction : MonoBehaviour
     {
         public float SpawnDelay = 5f;
+
+        private float timer = 0f;
         public GameObject[] EnemyPrefab;
         private Vector3 _spawnPos;
 
         private GameObject _player;
 
+
+        bool active = false;
         public void Start()
         {
             _player = GameObject.Find("Player");
             _spawnPos = transform.position;
         }
 
-        public void OnTriggerEnter2D(Collider2D other)
-        {
-            if (EnemyPrefab.Length > 0)
-                if (other.gameObject.Equals(_player)) StartCoroutine("SpawnEnemies");
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (EnemyPrefab.Length > 0)
-                if (other.gameObject.Equals(_player)) StopCoroutine("SpawnEnemies");
-        }
-
-        public IEnumerator SpawnEnemies()
-        {
-            for (;;)
+        public void Update()
+        { 
+            if (timer <= 0)
             {
-
-                if (EnemyPrefab.Length == 0)
-                    break;
+                if (!active || EnemyPrefab.Length == 0)
+                    return;
 
                 Debug.Log("SPAWN!");
                 Debug.Log(_spawnPos);
@@ -44,9 +35,24 @@ namespace world.action
                 Debug.Log("spawn:" + index);
                 Instantiate(EnemyPrefab[index], _spawnPos, new Quaternion());
 
-                //_spawnPos.x += 1f;
-                yield return new WaitForSeconds(SpawnDelay);
+                // reset timer
+                timer = SpawnDelay;
+            }
+            else
+            {
+                // update timer
+                timer -= Time.deltaTime;
             }
         }
-    }
+
+        public void OnTriggerEnter2D(Collider2D other)
+        {
+            active = true;
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            active = false;
+        }
+
 }
