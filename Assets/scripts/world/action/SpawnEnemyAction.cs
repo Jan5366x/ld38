@@ -15,6 +15,7 @@ namespace world.action
 
 
         bool active = false;
+
         public void Start()
         {
             _player = GameObject.Find("Player");
@@ -22,7 +23,7 @@ namespace world.action
         }
 
         public void Update()
-        { 
+        {
             if (timer <= 0)
             {
                 if (!active || EnemyPrefab.Length == 0)
@@ -54,5 +55,5 @@ namespace world.action
         {
             active = false;
         }
-
+    }
 }
