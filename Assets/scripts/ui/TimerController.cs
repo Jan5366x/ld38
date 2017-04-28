@@ -7,6 +7,7 @@ namespace ui
     {
         private static Text _timerText;
         private float _startTime;
+        public static bool active = true;
 
         private void Start()
         {
@@ -18,6 +19,10 @@ namespace ui
 
         private void FixedUpdate()
         {
+
+            if (!active)
+                return;
+
             var elapsed = Time.time - _startTime;
 
             var minutes = Mathf.RoundToInt(Mathf.Floor(elapsed / 60));

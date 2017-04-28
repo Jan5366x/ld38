@@ -12,6 +12,7 @@ namespace Assets.scripts
         public static int WORLD_SIZE = 50;
         public static float WORLD_UPDATE_DELAY = 3.0f;
         public static bool COMPLEX_INFECTION = false;
+        public static float CHECK_WIN_DELAY = 5.0f;
 
         // healer settings
         public static int HEALER_CONSTRUCTION_PICKUP_COST = 5;
@@ -36,8 +37,8 @@ namespace Assets.scripts
         // stamina
         public static int PLAYER_STAMINA = 500;
         public static int PLAYER_STAMINA_DEC_RATE_FRAME = 1;
-        public static int PLAYER_STAMINA_RECOVERY = 20;
-        public static int PLAYER_STAMINA_RECOVERY_RATE_SECONDS = 1;
+        public static int PLAYER_STAMINA_RECOVERY = 35;
+        public static float PLAYER_STAMINA_RECOVERY_RATE = 1f;
         // pickups
         public static int PLAYER_STARTING_PICKUPS = 0;
         // attack

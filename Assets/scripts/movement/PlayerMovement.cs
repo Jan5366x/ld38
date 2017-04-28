@@ -15,26 +15,16 @@ namespace movement
         private Animator _animator;
         private PlayerLogic _player;
 
+        private float staminaTimer = 0f;
+
         // Use this for initialization
         void Start()
         {
             _animator = GetComponent<Animator>();
             _player = GetComponentInParent<PlayerLogic>();
-
-            StartCoroutine("StaminaRegen");
         }
 
-        public IEnumerator StaminaRegen()
-        {
-            for (;;)
-            {
-                if (Input.GetButton("Sprint")) yield return new WaitWhile(() => Input.GetButton("Sprint"));
-
-                _player.Stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
-
-                yield return new WaitForSeconds(GameProperties.PLAYER_STAMINA_RECOVERY_RATE_SECONDS);
-            }
-        }
+        
 
         // Update is called once per frame
         void FixedUpdate()
@@ -48,12 +38,27 @@ namespace movement
                                  * Time.deltaTime * BaseSpeed;
 
             float speedFactor;
+
             if (Input.GetButton("Sprint") && _player.Stamina.CurrentValue > _player.Stamina.MinValue || SprintOverride)
             {
                 _player.Stamina.CurrentValue -= GameProperties.PLAYER_STAMINA_DEC_RATE_FRAME;
                 speedFactor = SpeedFactorRun;
+
+                staminaTimer = GameProperties.PLAYER_STAMINA_RECOVERY_RATE;
+            } else {
+                if (!Input.GetButton("Sprint")) {
+                    if (staminaTimer <= 0)
+                    {
+                        _player.Stamina.CurrentValue += GameProperties.PLAYER_STAMINA_RECOVERY;
+                        staminaTimer = GameProperties.PLAYER_STAMINA_RECOVERY_RATE;
+                    }
+
+                    staminaTimer -= Time.deltaTime;
+                }
+
+                // handle walk speed factor
+                speedFactor = SpeedFactorWalk;
             }
-            else speedFactor = SpeedFactorWalk;
 
             _animator.SetFloat("velocityX", movementVector.normalized.x);
             _animator.SetFloat("velocityY", movementVector.normalized.y);

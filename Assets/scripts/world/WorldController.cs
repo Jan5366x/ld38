@@ -10,12 +10,17 @@ using UnityEngine;
 /// World Controller
 /// </summary>
 public class WorldController : MonoBehaviour {
+
+    public static bool active = true;
     public static byte INFECTED = 1;
     public static byte NORMAL = 0;
 
     public Transform infector;
     public Transform[] items;
 
+
+    [SerializeField]
+    private GameObject _winMessageBoxPrefab;
     private WorldSector[,] sectors = new WorldSector[GameProperties.WORLD_SIZE, GameProperties.WORLD_SIZE];
     private List<byte[,]> infectionSpriteData = new List<byte[,]>();
 
@@ -24,7 +29,7 @@ public class WorldController : MonoBehaviour {
     private float updateTimer = 0.0f;
     private float itemSpawnTimer = 0.0f;
     private float infectorSpawnTimer = 0.0f;
-
+    private float winTimer = 20.0f;
 
 
     // Use this for initialization
@@ -48,12 +53,15 @@ public class WorldController : MonoBehaviour {
         // TODO DIRTY timing hotfix for testing
         if (!init) Init();
 
+        if (!active)
+            return;
 
         if (updateTimer <= 0 )
         {
 
             // run logic
             worldUpdate();
+            checkWin();
 
             // handle spawn logic
             handleInfectorSpawning();
@@ -71,6 +79,57 @@ public class WorldController : MonoBehaviour {
 	}
 
 
+    private void checkWin()
+    {
+        if (winTimer <= 0)
+        {
+
+            if (hasWin()) {
+                // WIN WIN WIN !!!!
+
+                GameObject mainUi = GameObject.Find("MainUI");
+
+                if (mainUi != null && _winMessageBoxPrefab != null)
+                {
+                    Instantiate(_winMessageBoxPrefab, mainUi.transform);
+                }
+
+
+                // stop logic
+                ui.TimerController.active = false;
+                active = false;
+
+                ui.TimerController.active = false;
+                // TODO
+            }
+
+            // reset timer
+            winTimer = GameProperties.CHECK_WIN_DELAY;
+        }
+        else
+        {
+            // update timer
+            winTimer -= Time.deltaTime;
+        }
+    }
+
+    private bool hasWin() {
+        for (int x = 0; x < GameProperties.WORLD_SIZE; x++)
+        {
+            for (int y = 0; y < GameProperties.WORLD_SIZE; y++)
+            {
+                WorldSector sector = sectors[x, y];
+
+                if (sector == null)
+                    continue;
+
+                if (sector.IsInfected)
+                    return false;
+            }
+        }
+
+        return true;
+    }
     private void handleItemSpawning() {
 
         if (items.Length == 0)
@@ -121,6 +180,8 @@ public class WorldController : MonoBehaviour {
             itemSpawnTimer -= Time.deltaTime;
         }
     }
+
+
 
 
     private void handleInfectorSpawning()
@@ -377,38 +438,12 @@ public class WorldController : MonoBehaviour {
 
                 worldData.Infection += ((((GameProperties.INFECTION_RANGE - distance) * 100) / GameProperties.INFECTION_RANGE) * power) / 100;
 
-                // state change ?!
-                bool stateChange = wasInfected != worldData.IsInfected;
-
-
                 // force update for all nearby sectors
                 worldData.updateState(this, posX, locY);
 
 
 
-                /* old code from complex code (don't delete yet!)
-                if (stateChange)
-                {
-                    for (int x = posX - 1; x <= posX + 1; x++)
-                    {
-                        for (int y = posX - 1; y <= posY + 1; y++)
-                        {
-                            WorldSector updateSector = sectors[x, y];
-                            if (updateSector == null)
-                                continue;
 
-                            WorldData updateWorldData = updateSector.WorldData;
-
-                            if (updateWorldData == null)
-                                continue;
-
-                            updateWorldData.updateState(this, x, y);
-
-                        }
-                    }
-                }
-
-    */
             }
         }
     }
@@ -509,3 +544,27 @@ public class WorldController : MonoBehaviour {
         }
     }
 }
+
+/* old code from complex code (don't delete yet!)
+if (stateChange)
+{
+    for (int x = posX - 1; x <= posX + 1; x++)
+    {
+        for (int y = posX - 1; y <= posY + 1; y++)
+        {
+            WorldSector updateSector = sectors[x, y];
+            if (updateSector == null)
+                continue;
+
+            WorldData updateWorldData = updateSector.WorldData;
+
+            if (updateWorldData == null)
+                continue;
+
+            updateWorldData.updateState(this, x, y);
+
+        }
+    }
+}
+
+*/

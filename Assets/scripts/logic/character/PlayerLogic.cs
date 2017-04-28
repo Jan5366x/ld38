@@ -10,11 +10,12 @@ namespace logic.character
     {
         [SerializeField] private GameObject _healerObject;
         [SerializeField] private GameObject _deathMessageBoxPrefab;
-
+       
         private GameObject _mainUi;
         private GameObject _healthBar;
         private GameObject _staminaBar;
         private GameObject _pickupCounter;
+        
         private GameObject _deathMessageBox;
 
         private EnemyAttackLogic _enemyInRange;
@@ -23,6 +24,8 @@ namespace logic.character
         public HitPoints HitPoints { get; private set; }
         public Stamina Stamina { get; private set; }
         public Pickups Pickups { get; private set; }
+
+        private bool dead = false;
 
         public void Start()
         {
@@ -68,7 +71,7 @@ namespace logic.character
 
         private string GetCurrentTileName()
         {
-            return "G-" + Mathf.RoundToInt(transform.position.x) + "-" + -Mathf.RoundToInt(transform.position.y);
+            return "G-" + (int) transform.position.x + "-" + (int) -transform.position.y;
         }
 
         private void OnTriggerStay2D(Collider2D other)
@@ -87,15 +90,31 @@ namespace logic.character
             }
         }
 
+
+        private void triggerDeath()
+        {
+            if (_mainUi != null && _deathMessageBox == null)
+            {
+                _deathMessageBox = Instantiate(_deathMessageBoxPrefab, _mainUi.transform);
+            }
+
+            ui.TimerController.active = false;
+            WorldController.active = false;
+
+
+            dead = true;
+        }
+
         public void Update()
         {
+
+            if (dead)
+                return;
+
+            // update death logic
             if (HitPoints.Dead)
             {
-                if (_mainUi != null && _deathMessageBox == null)
-                {
-                    _deathMessageBox = Instantiate(_deathMessageBoxPrefab, _mainUi.transform);
-                }
-                return;
+                triggerDeath();
             }
 
             if (Input.GetButtonDown("Build"))
