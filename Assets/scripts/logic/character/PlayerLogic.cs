@@ -71,7 +71,7 @@ namespace logic.character
 
         private string GetCurrentTileName()
         {
-            return "G-" + (int) transform.position.x + "-" + (int) -transform.position.y;
+            return "G-" + Mathf.RoundToInt(transform.position.x) + "-" + Mathf.RoundToInt(-transform.position.y);
         }
 
         private void OnTriggerStay2D(Collider2D other)

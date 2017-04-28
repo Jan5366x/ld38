@@ -9,6 +9,7 @@ namespace logic.character
         [SerializeField] private int _damage = 10;
         [SerializeField] private float _attackRate = 1.0f;
         [SerializeField] private int _hitPoints = 10;
+        [SerializeField] private bool _distroyParent = false;
 
         private PlayerLogic _player;
         private Animator _animator;
@@ -59,7 +60,13 @@ namespace logic.character
         {
             if (HitPoints.Dead)
             {
-                Destroy(gameObject);
+                if (_distroyParent)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else {
+                    Destroy(gameObject);
+                }
             }
         }
     }
